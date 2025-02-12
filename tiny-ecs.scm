@@ -1,9 +1,12 @@
 (define-module (tiny-ecs)
-  #:export (make-entity add-component! get-component! register-system update-systems))
+  #:export (make-entity add-component! get-component register-system update-systems all-entities get-entity))
 
 (use-modules (srfi srfi-1))
 
 (define *entity-registry* (make-hash-table))
+
+(define (all-entities)
+  (hash-keys *entity-registry*))
 
 (define (hash-keys h)
   (hash-map->list (lambda (key value) key) h))
@@ -13,14 +16,20 @@
     (hash-set! *entity-registry* eid (make-hash-table))
     eid))
 
+(define (get-entity eid)
+  (let ((entity (hash-ref *entity-registry* eid)))
+    (if entity
+	entity
+	(error "Entity does not exist"))))
+
 (define (add-component! eid comp-type data)
-  (let ((components (hash-ref *entity-registry* eid #f)))
+  (let ((components (get-entity eid)))
     (if components
         (hash-set! components comp-type data)
         (error "Entity does not exist"))))
 
 (define (get-component eid comp-type)
-  (let ((components (hash-ref *entity-registry* eid #f)))
+  (let ((components (get-entity eid)))
     (if components
         (hash-ref components comp-type #f)
         #f)))

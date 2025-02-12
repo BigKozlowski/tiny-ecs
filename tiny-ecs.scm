@@ -1,5 +1,13 @@
 (define-module (tiny-ecs)
-  #:export (make-entity add-component! get-component register-system update-systems all-entities get-entity))
+  #:export (
+            make-entity
+            add-component!
+            get-component
+            register-system
+            update-systems
+            all-entities
+            get-entity
+            ))
 
 (use-modules (srfi srfi-1))
 

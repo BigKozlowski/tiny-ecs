@@ -6,7 +6,9 @@
             register-system
             update-systems
             all-entities
+            clear-entities
             get-entity
+            clear-systems
             ))
 
 (use-modules (srfi srfi-1))
@@ -15,6 +17,8 @@
 
 (define (all-entities)
   (hash-keys *entity-registry*))
+(define (clear-entities)
+  (set! *entity-registry* (make-hash-table)))
 
 (define (hash-keys h)
   (hash-map->list (lambda (key value) key) h))
@@ -42,7 +46,10 @@
         (hash-ref components comp-type #f)
         #f)))
 
-(define *systems* '())
+(define *systems* (list))
+
+(define (clear-systems)
+  (set! *systems* (list)))
 
 (define (register-system required-components process-function)
   (set! *systems*

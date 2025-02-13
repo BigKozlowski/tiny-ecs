@@ -31,8 +31,20 @@
                             vel))
                      (newline))))
 
+;;; TODO: ?multiple-entity systems?
+(register-system '(position move-direction)
+                 (lambda (eid1 eid2)
+                   (let ((pos1 (get-component eid1 'position))
+                         (pos2 (get-component eid2 'position))
+                         (md1 (get-component eid1 'move-direction))
+                         (md2 (get-component eid2 'move-direction)))
+                     (collides
+                      (vector-add pos1 md1)
+                      (vector-add pos2 md2)))))
+
 (define *attacks* (list))
 
+;;; TODO: remove attack entry from *attacks*
 (define (get-attack eid)
   (define (inner attacks)
     (if (null? attacks)
